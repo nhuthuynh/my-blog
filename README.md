@@ -1,4 +1,5 @@
 This project is for learning and expirementing purposes
+    using whatwg-fetch library to have fetch function working on internet explorer
 
     16.8 react introduces react hooks
         - are javascript functions.
