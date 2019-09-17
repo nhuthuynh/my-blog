@@ -33,7 +33,7 @@ app.get('/api/articles/:name', async (req, res) => {
 
 app.post('/api/articles/:name/upvote', async (req, res) => {
     withDB(async (db) => {
-        const { name } = req.body;
+        const { name } = req.params;
         const article = await db.collection(ARTICLES).findOne({ name });
         await db.collection(ARTICLES).updateOne({ name }, {
             '$set': {
