@@ -24,7 +24,7 @@ const withDB = async (operations, res) => {
 }
 
 app.get('/api/articles/:name', async (req, res) => {
-    withDB(async (db, res) => {
+    withDB(async (db) => {
         const { name } = req.params;    
         const article = await db.collection(ARTICLES).findOne({ name });
         res.status(200).json(article);
