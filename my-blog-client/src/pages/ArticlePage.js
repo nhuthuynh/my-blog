@@ -4,6 +4,7 @@ import ArticleList from '../components/ArticleList';
 import UpvotesSection from '../components/UpvotesSection';
 import CommentsList from '../components/CommentsList';
 import NotFoundPage from './NotFoundPage';
+import AddCommentForm from '../components/AddCommentForm';
 
 const ArticlePage = ({ match }) => {
     
@@ -30,20 +31,19 @@ const ArticlePage = ({ match }) => {
 
     if (!articleInfo) return (<NotFoundPage/>)
     return (
-    <>
-        <h1>{ article.title }</h1>
+        <div className="article-container" style={{ maxWidth: 800 + 'px', minWidth: 500 + 'px', margin: '10px auto', textAlign: 'justify'}}>
+        <h1 style={{ textAlign: 'left'}}>{ article.title }</h1>
         <UpvotesSection upvotes={articleInfo.upvotes} articleName={name} setArticleInfo={setArticleInfo} />
-        <div className="content">
             {
                 article.content.map((paragraph, key) => (<p key={key}>{paragraph}</p>))
             }
-        </div>
-        <CommentsList comments={articleInfo.comments} />
+            <CommentsList comments={articleInfo.comments} />
+        <AddCommentForm articleName={name} setArticleInfo={setArticleInfo} />
         <div className="others" style={{ textAlign: "left", paddingLeft: 20 + "px"}}>
             <h3>Other articles</h3>
             <ArticleList articles={otherArticles} />
         </div>
-    </>)
+        </div>)
 }
 
 export default ArticlePage;

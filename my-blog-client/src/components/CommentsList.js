@@ -5,8 +5,8 @@ const CommentsList = ({ comments }) => (
         <h3>Comments: </h3>
     {
         comments.map((comment, key) => (
-                <div className="comment" key={key}>
-                    <h4>{comment.title}</h4>
+                <div className="comment" key={key} style={{marginBottom: 5 + 'px', borderBottom: '1px solid rgba(0, 0, 0, 0.3)' }}>
+                    <h4>{comment.username}</h4>
                     <p>{comment.content}</p>
                 </div>
             ))
