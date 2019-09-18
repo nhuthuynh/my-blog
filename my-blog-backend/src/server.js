@@ -1,9 +1,17 @@
 import express from 'express';
 import bodyParser  from 'body-parser';
 import { MongoClient } from 'mongodb';
+import path from 'path';
+
+/**
+ * Path is standard from node, no need to install 
+ * 
+ */
 
 const app = express();
 
+// tell node server serve static file from build folder
+app.use(express.static(path.json(__dirname, '/build')));
 app.use(bodyParser.json());
 
 const DB_URL = 'mongodb://localhost:27017';
@@ -61,5 +69,7 @@ app.post('/api/articles/:name/comments', async (req, res) => {
     }, res);
 });
 
+// all request that ain't caught by any other api routes should be passed to our client app
+app.get('*', (req, res) => { res.sendFile(path.join(__dirname + '/build/index.html')) });
 
 app.listen(8000, ()=> console.log('listening'));
