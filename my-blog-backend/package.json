@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npm run build:live",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon --exec npx babel-node src/server.js"
+    "dev": "npx nodemon --exec npx babel-node src/server.ts",
+    "build": "tsc -p .",
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts"
   },
   "keywords": [],
   "author": "",
