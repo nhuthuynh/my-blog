@@ -1,7 +1,8 @@
-import express from 'express';
-import bodyParser  from 'body-parser';
+import * as express from 'express';
+import * as bodyParser  from 'body-parser';
 import { MongoClient } from 'mongodb';
-import path from 'path';
+import * as path from 'path';
+import { Response, Request } from 'express-serve-static-core';
 
 /**
  * Path is standard from node, no need to install 
@@ -11,16 +12,16 @@ import path from 'path';
 const app = express();
 
 // tell node server serve static file from build folder
-app.use(express.static(path.json(__dirname, '/build')));
+app.use(express.static(path.join(__dirname, '/build')));
 app.use(bodyParser.json());
 
-const DB_URL = 'mongodb://localhost:27017';
-const DB_NAME = 'my-blog';
-const ARTICLES = 'articles';
+const DB_URL: string = 'mongodb://localhost:27017';
+const DB_NAME: string = 'my-blog';
+const ARTICLES: string = 'articles';
 
-const connectDB = async (url) => await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const connectDB = async (url: string): Promise<any> => await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const withDB = async (operations, res) => {
+const withDB = async (operations: Function, res: Response): Promise<void> => {
     try {
         const client = await connectDB(DB_URL);
         const db = client.db(DB_NAME);
@@ -31,7 +32,7 @@ const withDB = async (operations, res) => {
     }
 }
 
-app.get('/api/articles/:name', async (req, res) => {
+app.get('/api/articles/:name', async (req: Request, res: Response): Promise<void> => {
     withDB(async (db) => {
         const { name } = req.params;    
         const article = await db.collection(ARTICLES).findOne({ name });
@@ -39,7 +40,7 @@ app.get('/api/articles/:name', async (req, res) => {
     }, res);
 });
 
-app.post('/api/articles/:name/upvote', async (req, res) => {
+app.post('/api/articles/:name/upvote', async (req: Request, res: Response): Promise<void> => {
     withDB(async (db) => {
         const { name } = req.params;
         const article = await db.collection(ARTICLES).findOne({ name });
@@ -53,7 +54,7 @@ app.post('/api/articles/:name/upvote', async (req, res) => {
     }, res);
 });
 
-app.post('/api/articles/:name/comments', async (req, res) => {
+app.post('/api/articles/:name/comments', async (req: Request, res: Response): Promise<void> => {
     const { username, content } = req.body;
     const { name } = req.params;
     
@@ -70,6 +71,6 @@ app.post('/api/articles/:name/comments', async (req, res) => {
 });
 
 // all request that ain't caught by any other api routes should be passed to our client app
-app.get('*', (req, res) => { res.sendFile(path.join(__dirname + '/build/index.html')) });
+app.get('*', (req: Request, res: Response): void => { res.sendFile(path.join(__dirname + '/build/index.html')) });
 
 app.listen(8000, ()=> console.log('listening'));
