@@ -12,3 +12,11 @@ export function errorHandler(error: any, req: Request, res: Response, next?: any
 
     return res.status(500).json({message: error.message});
 }
+
+export function errorGlobalHandler(error: any, req: Request, res: Response, next?: any) {
+    if (error.name === 'StatusError') {
+        errorHandler(error, req, res, next);
+    } else {
+        next(error);
+    }
+}
