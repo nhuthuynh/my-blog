@@ -29,10 +29,11 @@ if (process.env.NODE_ENV === 'development') {
     app.use(errorGlobalHandler());
 }
 
+app[Articles.insert.requestMethod](Articles.insert.routeUrl, Articles.insert.func);
 app[Articles.findByName.requestMethod](Articles.findByName.routeUrl, Articles.findByName.func);
 app[Articles.upvote.requestMethod](Articles.upvote.routeUrl, Articles.upvote.func);
 app[Articles.comment.requestMethod](Articles.comment.routeUrl, Articles.comment.func);
-console.log(port);
+
 // all request that ain't caught by any other api routes should be passed to our client app
 app.get('*', (req: Request, res: Response): void => { res.sendFile(path.join(__dirname + '/build/index.html')) });
 
