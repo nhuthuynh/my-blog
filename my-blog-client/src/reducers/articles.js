@@ -6,9 +6,9 @@ const initialState = {
     article: { id: 0, name: '', title: '', content: '', comment: [], upvotes: 0 }
 }
 
-const retrieve = (articleRetrieve) => ({
+const retrieve = (articles) => ({
     type: ARTICLE_RETRIEVE,
-    payload: articleRetrieve
+    payload: articles
 })
 
 const get = (article) => ({
