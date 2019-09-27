@@ -1,13 +1,22 @@
 import { operationWithDB } from '../modules/db';
 import { Response, Request } from 'express-serve-static-core';
 import { ARTICLES } from '../constant';
+import { Article } from '../models/article.model';
+import { MongooseDocument } from 'mongoose';
 
-const insert = async (req: Request, res: Response): Promise<void> => {
-    operationWithDB(async (db: any) => {
-        const { name, title, content } = req.body;
-        await db.collection(ARTICLES).insert({ name, title, content, upvotes: 0, comments: [] });
-        res.status(200).json({ success: true });
-    }, req, res);
+const create = async (req: Request, res: Response): Promise<void> => {
+    const newArticle = new Article(req.body);
+    newArticle.save((error: Error, article: MongooseDocument) => {
+        if (error) { res.send(error); }
+        res.status(200).json({ success: true, data: article });
+    });
+}
+
+const retrieveAll = async (req: Request, res: Response):Promise<void> => {
+    Article.find({}, (error: Error, articles: MongooseDocument) => {
+        if (error) { res.send(error); }
+        res.status(200).json({ success: true, data: articles });
+    });
 }
 
 const findByName = async  (req: Request, res: Response): Promise<void> => {
@@ -49,10 +58,15 @@ const comment = async (req: Request, res: Response): Promise<void> => {
 }
 
 export default {
-    insert: {
+    create: {
         requestMethod: 'post',
         routeUrl: '/api/articles',
-        func: insert
+        func: create
+    },
+    retrieveAll: {
+        requestMethod: 'get',
+        routeUrl: '/api/articles',
+        func: retrieveAll
     },
     findByName: {
         requestMethod: 'get',

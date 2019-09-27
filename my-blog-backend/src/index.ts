@@ -6,6 +6,7 @@ import { Response, Request } from 'express-serve-static-core';
 import errorGlobalHandler from 'errorhandler';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import { connectDB } from './modules/db';
 
 import { errorHandler } from './modules/errors';
 
@@ -24,12 +25,15 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(errorHandler);
 
+connectDB();
+
 if (process.env.NODE_ENV === 'development') {
     app.use(logger('dev'));
     app.use(errorGlobalHandler());
 }
 
-app[Articles.insert.requestMethod](Articles.insert.routeUrl, Articles.insert.func);
+app[Articles.create.requestMethod](Articles.create.routeUrl, Articles.create.func);
+app[Articles.retrieveAll.requestMethod](Articles.retrieveAll.routeUrl, Articles.retrieveAll.func);
 app[Articles.findByName.requestMethod](Articles.findByName.routeUrl, Articles.findByName.func);
 app[Articles.upvote.requestMethod](Articles.upvote.routeUrl, Articles.upvote.func);
 app[Articles.comment.requestMethod](Articles.comment.routeUrl, Articles.comment.func);
