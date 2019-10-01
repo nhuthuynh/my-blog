@@ -17,7 +17,6 @@ const app = express();
 dotenv.config();
 
 const port = process.env.SERVER_PORT;
-console.log(port);
 
 // tell node server serve static file from build folder
 app.use(express.static(path.join(__dirname, '/build')));
@@ -34,9 +33,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(ArticleRoutes);
-app.get('/', (req, res, next) => {
-    res.status(200).json({ success: true });
-});
 
 // all request that ain't caught by any other api routes should be passed to our client app
 app.get('*', (req: Request, res: Response): void => { res.sendFile(path.join(__dirname + '/build/index.html')) });
