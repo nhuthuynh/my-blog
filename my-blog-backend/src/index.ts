@@ -10,13 +10,14 @@ import { connectDB } from './modules/db';
 
 import { errorHandler } from './modules/errors';
 
-import Articles from './routes/articles';
+import ArticleRoutes from './routes/articles';
 
 const app = express();
 
 dotenv.config();
 
 const port = process.env.SERVER_PORT;
+console.log(port);
 
 // tell node server serve static file from build folder
 app.use(express.static(path.join(__dirname, '/build')));
@@ -32,11 +33,10 @@ if (process.env.NODE_ENV === 'development') {
     app.use(errorGlobalHandler());
 }
 
-app[Articles.create.requestMethod](Articles.create.routeUrl, Articles.create.func);
-app[Articles.retrieveAll.requestMethod](Articles.retrieveAll.routeUrl, Articles.retrieveAll.func);
-app[Articles.findByName.requestMethod](Articles.findByName.routeUrl, Articles.findByName.func);
-app[Articles.upvote.requestMethod](Articles.upvote.routeUrl, Articles.upvote.func);
-app[Articles.comment.requestMethod](Articles.comment.routeUrl, Articles.comment.func);
+app.use(ArticleRoutes);
+app.get('/', (req, res, next) => {
+    res.status(200).json({ success: true });
+});
 
 // all request that ain't caught by any other api routes should be passed to our client app
 app.get('*', (req: Request, res: Response): void => { res.sendFile(path.join(__dirname + '/build/index.html')) });

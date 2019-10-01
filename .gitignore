@@ -27,3 +27,5 @@ yarn-debug.log*
 yarn-error.log*
 
 **/**_data
+
+**/package-lock.json
